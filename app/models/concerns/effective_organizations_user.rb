@@ -16,6 +16,11 @@ module EffectiveOrganizationsUser
   end
 
   included do
+    # App scoped
+    has_many :organizations, through: :representatives
+
+    # My teams
+    has_many :representatives, -> { Effective::Representative.sorted }, class_name: 'Effective::Representative', dependent: :delete_all
   end
 
 end

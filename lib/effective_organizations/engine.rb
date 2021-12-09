@@ -11,6 +11,7 @@ module EffectiveOrganizations
     initializer 'effective_organizations.active_record' do |app|
       ActiveSupport.on_load :active_record do
         ActiveRecord::Base.extend(EffectiveOrganizationsUser::Base)
+        ActiveRecord::Base.extend(EffectiveOrganizationsOrganization::Base)
       end
     end
 
