@@ -2,9 +2,14 @@ module Admin
   class EffectiveRepresentativesDatatable < Effective::Datatable
     datatable do
       col :id, visible: false
+      col :user_id, visible: false
 
       col :organization
       col :user
+
+      col :email do |representative|
+        mail_to(representative.user.email)
+      end
 
       col :roles, search: roles_collection
 

@@ -23,9 +23,12 @@ module EffectiveOrganizationsOrganization
     log_changes(except: :representatives) if respond_to?(:log_changes)
 
     # rich_text_body
-    has_many_rich_texts
+    # has_many_rich_texts
 
-    has_many :representatives, -> { Effective::Representative.sorted }, class_name: 'Effective::Representative', inverse_of: :organization
+    has_many :representatives, -> { Effective::Representative.sorted },
+      class_name: 'Effective::Representative', inverse_of: :organization, dependent: :delete_all
+
+    has_many :users, through: :representatives
 
     effective_resource do
       title                 :string

@@ -17,11 +17,15 @@ module EffectiveOrganizationsUser
 
   included do
     # My teams
-    has_many :representatives, -> { Effective::Representative.sorted }, class_name: 'Effective::Representative', dependent: :delete_all
+    has_many :representatives, -> { Effective::Representative.sorted },
+      class_name: 'Effective::Representative', inverse_of: :user, dependent: :delete_all
 
     # App scoped
     has_many :organizations, through: :representatives
+  end
 
+  def representative(organization:)
+    representatives.find { |rep| rep.organization_id == organization.id }
   end
 
 end

@@ -5,6 +5,10 @@ class EffectiveRepresentativesDatatable < Effective::Datatable
     col :organization
     col :user
 
+    col :email do |representative|
+      mail_to(representative.user.email)
+    end
+
     col :roles, search: roles_collection
 
     actions_col
