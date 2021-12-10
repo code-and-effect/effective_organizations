@@ -71,16 +71,85 @@ Add a link to the admin menu:
 
 All authorization checks are handled via the effective_resources gem found in the `config/initializers/effective_resources.rb` file.
 
+## Effective Roles
+
+This gem works with effective roles for the representative roles.
+
+Configure your `config/initializers/effective_roles.rb` something like this:
+
+```
+EffectiveRoles.setup(:caaa) do |config|
+  config.roles = [:admin, :reserved, :owner, :billing] # Only add to the end of this array. Never prepend roles.
+
+  # config.role_descriptions
+  # ========================
+  # This setting configures the text that is displayed by form helpers (see README.md)
+
+  config.role_descriptions = {
+    'User' => {
+      # User roles
+      admin: 'can log in to the /admin section of the website. full access to everything.',
+    },
+    'Effective::Representative' => {
+      owner: 'the owner. full access to everything.',
+      billing: 'the billing contact. full access to everything.'
+    }
+  }
+
+  # config.assignable_roles
+  # Which roles can be assigned by whom
+  # =======================
+  # When current_user is passed into a form helper function (see README.md)
+  # this setting determines which roles that current_user may assign
+  config.assignable_roles = {
+    'User' => { admin: [:admin] },
+
+    'Effective::Representative' => {
+      admin: [:owner, :billing],
+      owner: [:owner, :billing],
+      billing: [:billing]
+    }
+  }
+end
+```
+
+
 ## Permissions
 
 The permissions you actually want to define are as follows (using CanCan):
 
 ```ruby
+if user.persisted?
+  can :index, EffectiveOrganizations.Organization
+  can(:show, EffectiveOrganizations.Organization) { |organization| user.organizations.include?(organization) }
+
+  can([:edit, :update], EffectiveOrganizations.Organization) do |organization|
+    rep = user.representative(organization: organization)
+    rep && (rep.is?(:owner) || rep.is?(:billing))
+  end
+
+  can :index, Effective::Representative
+  can(:new, Effective::Representative)
+
+  can([:create, :edit, :update], Effective::Representative) do |representative|
+    rep = user.representative(organization: representative.organization)
+    rep && (rep.is?(:owner) || rep.is?(:billing))
+  end
+
+  can(:destroy, Effective::Representative) do |representative|
+    allowed = !(representative.is?(:owner) || representative.is?(:billing))
+    rep = user.representative(organization: representative.organization)
+
+    allowed && rep && (rep.is?(:owner) || rep.is?(:billing))
+  end
+end
 
 if user.admin?
   can :admin, :effective_organizations
-  can :manage, Effective::Organization
-  can :manage, Effective::Representative
+  can(crud, EffectiveOrganizations.Organization)
+
+  can(crud - [:destroy], Effective::Representative)
+  can(:destroy, Effective::Representative) { |rep| !rep.is?(:owner) }
 end
 ```
 
