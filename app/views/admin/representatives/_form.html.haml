@@ -30,7 +30,8 @@
 
     = f.checks :roles, EffectiveRoles.roles_collection(f.object)
 
-    = f.fields_for :user, f.object.user do |fu|
-      = render 'admin/representatives/user_fields', f: fu
+    - unless inline_datatable? && inline_datatable.attributes[:user_id].present?
+      = f.fields_for :user, f.object.user do |fu|
+        = render 'admin/representatives/user_fields', f: fu
 
   = f.submit

@@ -41,7 +41,7 @@ module EffectiveOrganizationsOrganization
       timestamps
     end
 
-    scope :deep, -> { includes(:rich_texts, :representatives) }
+    scope :deep, -> { includes(:representatives) }
     scope :sorted, -> { order(:title) }
 
     validates :title, presence: true, uniqueness: true
