@@ -1,6 +1,6 @@
-# EffectiveMembershipsCategory
+# EffectiveOrganizationsOrganization
 #
-# Mark your category model with effective_memberships_category to get all the includes
+# Mark your category model with effective_organizations_organization to get all the includes
 
 module EffectiveOrganizationsOrganization
   extend ActiveSupport::Concern
