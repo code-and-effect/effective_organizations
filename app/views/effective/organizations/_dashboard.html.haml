@@ -1,11 +1,9 @@
 %h2 Organizations
 
-- existing = current_user.applicants.in_progress
-
 - if current_user.organizations.present?
   %p You belong to #{pluralize(current_user.organizations.length, 'organization')}
 
-  - datatable = EffectiveResources.best('EffectiveOrganizationsDatatable').new(self)
+  - datatable = EffectiveResources.best('EffectiveOrganizationsDatatable').new(self, namespace: :effective)
   = render_datatable(datatable)
 
 - else
