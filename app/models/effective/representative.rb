@@ -4,7 +4,7 @@ module Effective
 
     log_changes(to: :organization) if respond_to?(:log_changes)
 
-    belongs_to :organization, polymorphic: true, counter_cache: true
+    belongs_to :organization, counter_cache: true
     belongs_to :user, polymorphic: true
 
     effective_resource do
@@ -21,8 +21,6 @@ module Effective
 
     validates :user_id, if: -> { user_id && user_type && organization_id },
       uniqueness: { scope: [:organization_id], message: 'already belongs to this organization' }
-
-    validates :roles, presence: true
 
     def to_s
       user.to_s

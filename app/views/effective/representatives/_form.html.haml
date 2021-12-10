@@ -1,0 +1,15 @@
+= effective_form_with(model: [:admin, representative], engine: true) do |f|
+  = f.hidden_field :user_id
+  = f.hidden_field :user_type
+  = f.hidden_field :organization_id
+
+  -# - unless inline_datatable? && inline_datatable.attributes[:organization_id].present?
+  -#   = f.select :organization_id, EffectiveOrganizations.Organization.sorted
+
+  -# - unless inline_datatable? && inline_datatable.attributes[:user_id].present?
+  -#   = f.select :user, {'Users' => current_user.class.sorted }, polymorphic: true
+
+  - current_representative = Effective::Representative.new(roles: :admin)
+  = f.checks :roles, EffectiveRoles.roles_collection(f.object, current_representative)
+
+  = f.submit
