@@ -10,7 +10,7 @@
     - unless inline_datatable? && inline_datatable.attributes[:organization_id].present?
       = f.select :organization, { 'Organizations' => EffectiveOrganizations.Organization.sorted }, polymorphic: true
 
-    = f.checks :roles, EffectiveRoles.roles_collection(f.object)
+    = f.checks :roles, EffectiveRoles.roles_collection(f.object, skip_disabled: true)
 
     - unless inline_datatable? && inline_datatable.attributes[:user_id].present?
       = f.hidden_field :new_representative_user_action, value: 'Invite new user'
@@ -25,7 +25,7 @@
     - unless inline_datatable? && inline_datatable.attributes[:user_id].present?
       = f.static_field :user
 
-    = f.checks :roles, EffectiveRoles.roles_collection(f.object)
+    = f.checks :roles, EffectiveRoles.roles_collection(f.object, skip_disabled: true)
 
     = f.fields_for :user, f.object.user do |fu|
       = render 'effective/representatives/user_fields', f: fu

@@ -5,5 +5,5 @@
 
 - if organization.persisted?
   %h2 Representatives
-  - datatable = Admin::EffectiveRepresentativesDatatable.new(organization_id: organization.id)
+  - datatable = Admin::EffectiveRepresentativesDatatable.new(organization_id: organization.id, organization_type: organization.class.name)
   = render_inline_datatable(datatable)

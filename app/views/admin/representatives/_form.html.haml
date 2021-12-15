@@ -4,12 +4,13 @@
   = f.hidden_field :user_id
   = f.hidden_field :user_type
   = f.hidden_field :organization_id
+  = f.hidden_field :organization_type
 
   - if f.object.new_record?
     - unless inline_datatable? && inline_datatable.attributes[:organization_id].present?
       = f.select :organization, { 'Organizations' => EffectiveOrganizations.Organization.sorted }, polymorphic: true
 
-    = f.checks :roles, EffectiveRoles.roles_collection(f.object)
+    = f.checks :roles, EffectiveRoles.roles_collection(f.object, skip_disabled: true)
 
     - unless inline_datatable? && inline_datatable.attributes[:user_id].present?
       = f.radios :new_representative_user_action, ['Invite new user', 'Add existing user'], inline: true, label: 'Representative'
@@ -28,7 +29,7 @@
     - unless inline_datatable? && inline_datatable.attributes[:user_id].present?
       = f.static_field :user
 
-    = f.checks :roles, EffectiveRoles.roles_collection(f.object)
+    = f.checks :roles, EffectiveRoles.roles_collection(f.object, skip_disabled: true)
 
     - unless inline_datatable? && inline_datatable.attributes[:user_id].present?
       = f.fields_for :user, f.object.user do |fu|
