@@ -1,12 +1,7 @@
 - url = (organization.persisted? ? effective_organizations.organization_path(organization) : effective_organizations.organizations_path)
 
 = effective_form_with(model: organization, url: url) do |f|
-  - categories = EffectiveOrganizations.Organization.categories
-
-  - if categories.present?
-    = f.select :category, categories, required: true
-
-  = f.text_field :title
+  = render 'effective/organizations/fields', f: f
 
   = f.submit
 

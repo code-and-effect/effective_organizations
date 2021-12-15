@@ -6,7 +6,11 @@ module EffectiveOrganizationsOrganization
   extend ActiveSupport::Concern
 
   module Base
-    def effective_organizations_organization
+    def effective_organizations_organization(users_source_type: nil)
+      @effective_organizations_organization_opts = {
+        users_source_type: users_source_type
+      }
+
       include ::EffectiveOrganizationsOrganization
     end
   end
@@ -20,7 +24,7 @@ module EffectiveOrganizationsOrganization
   end
 
   included do
-    log_changes(except: :representatives) if respond_to?(:log_changes)
+    log_changes(except: [:representatives, :users]) if respond_to?(:log_changes)
 
     # rich_text_body
     # has_many_rich_texts
@@ -28,7 +32,8 @@ module EffectiveOrganizationsOrganization
     has_many :representatives, -> { Effective::Representative.sorted },
       class_name: 'Effective::Representative', inverse_of: :organization, dependent: :delete_all
 
-    has_many :users, through: :representatives
+    has_many :users, through: :representatives,
+      source_type: (@effective_organizations_organization_opts[:users_source_type] || (name.start_with?('Effective') ? '::User' : "#{name.split('::').first}::Organization"))
 
     effective_resource do
       title                 :string

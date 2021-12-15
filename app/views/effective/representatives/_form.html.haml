@@ -4,10 +4,11 @@
   = f.hidden_field :user_id
   = f.hidden_field :user_type
   = f.hidden_field :organization_id
+  = f.hidden_field :organization_type
 
   - if f.object.new_record?
     - unless inline_datatable? && inline_datatable.attributes[:organization_id].present?
-      = f.select :organization_id, EffectiveOrganizations.Organization.sorted
+      = f.select :organization, { 'Organizations' => EffectiveOrganizations.Organization.sorted }, polymorphic: true
 
     = f.checks :roles, EffectiveRoles.roles_collection(f.object)
 

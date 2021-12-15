@@ -6,7 +6,11 @@ module EffectiveOrganizationsUser
   extend ActiveSupport::Concern
 
   module Base
-    def effective_organizations_user
+    def effective_organizations_user(organizations_source_type: nil)
+      @effective_organizations_user_opts = {
+        organizations_source_type: organizations_source_type
+      }
+
       include ::EffectiveOrganizationsUser
     end
   end
@@ -21,7 +25,8 @@ module EffectiveOrganizationsUser
       class_name: 'Effective::Representative', inverse_of: :user, dependent: :delete_all
 
     # App scoped
-    has_many :organizations, through: :representatives
+    has_many :organizations, through: :representatives,
+      source_type: @effective_organizations_user_opts[:organizations_source_type] || "#{name.split('::').first}::Organization"
   end
 
   def representative(organization:)

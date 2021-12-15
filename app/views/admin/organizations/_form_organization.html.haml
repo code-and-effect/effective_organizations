@@ -1,10 +1,5 @@
 = effective_form_with(model: [:admin, organization], engine: true) do |f|
-  - categories = EffectiveOrganizations.Organization.categories
-
-  - if categories.present?
-    = f.select :category, categories, required: true
-
-  = f.text_field :title
+  = render 'admin/organizations/fields', f: f
 
   = effective_submit(f)
 
