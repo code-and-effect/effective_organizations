@@ -11,11 +11,24 @@ class EffectiveRepresentativesDatatable < Effective::Datatable
 
     col :roles, search: roles_collection
 
-    actions_col
+    unless attributes[:actions] == false
+      actions_col
+    end
+
   end
 
   collection do
-    Effective::Representative.deep.all.where(organization: current_user.organizations)
+    scope = Effective::Representative.deep.all.where(organization: current_user.organizations)
+
+    if attributes[:organization_id]
+      scope = scope.where(organization_id: attributes[:organization_id])
+    end
+
+    if attributes[:user_id]
+      scope = scope.where(user_id: attributes[:user_id])
+    end
+
+    scope
   end
 
   def roles_collection
