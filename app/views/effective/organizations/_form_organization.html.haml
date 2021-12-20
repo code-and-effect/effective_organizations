@@ -7,5 +7,5 @@
 
 - if organization.persisted?
   %h2 Representatives
-  - datatable = EffectiveRepresentativesDatatable.new(organization_id: organization.id)
+  - datatable = EffectiveRepresentativesDatatable.new(organization: organization)
   = render_inline_datatable(datatable)

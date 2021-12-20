@@ -32,6 +32,8 @@ module EffectiveOrganizationsOrganization
     has_many :representatives, -> { Effective::Representative.sorted },
       class_name: 'Effective::Representative', inverse_of: :organization, dependent: :delete_all
 
+    accepts_nested_attributes_for :representatives, allow_destroy: true
+
     has_many :users, through: :representatives,
       source_type: (@effective_organizations_organization_opts[:users_source_type] || (name.start_with?('Effective') ? '::User' : "#{name.split('::').first}::Organization"))
 
@@ -56,6 +58,15 @@ module EffectiveOrganizationsOrganization
 
   def to_s
     title.presence || 'New Organization'
+  end
+
+  def representative(user:)
+    representatives.find { |rep| rep.user_id == user.id }
+  end
+
+  # Find or build
+  def build_representative(user:)
+    representative(user: user) || representatives.build(user: user)
   end
 
 end

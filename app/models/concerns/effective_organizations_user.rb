@@ -24,6 +24,8 @@ module EffectiveOrganizationsUser
     has_many :representatives, -> { Effective::Representative.sorted },
       class_name: 'Effective::Representative', inverse_of: :user, dependent: :delete_all
 
+    accepts_nested_attributes_for :representatives, allow_destroy: true
+
     # App scoped
     has_many :organizations, through: :representatives,
       source_type: @effective_organizations_user_opts[:organizations_source_type] || "#{name.split('::').first}::Organization"
