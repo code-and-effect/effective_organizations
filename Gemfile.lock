@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    effective_organizations (0.0.2)
+    effective_organizations (0.0.6)
       effective_bootstrap
       effective_datatables (>= 4.0.0)
       effective_resources
@@ -117,7 +117,7 @@ GEM
       jquery-rails
       rails (>= 4.0.0)
       sassc
-    effective_datatables (4.10.1)
+    effective_datatables (4.10.2)
       coffee-rails
       effective_bootstrap
       effective_resources
@@ -128,7 +128,7 @@ GEM
       rails (>= 3.2.0)
     effective_resources (1.9.7)
       rails (>= 4.0.0)
-    effective_roles (2.2.0)
+    effective_roles (2.2.1)
       effective_resources
       rails (>= 3.2.0)
     effective_test_bot (1.2.9)

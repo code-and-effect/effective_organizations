@@ -6,11 +6,7 @@ module EffectiveOrganizationsOrganization
   extend ActiveSupport::Concern
 
   module Base
-    def effective_organizations_organization(users_source_type: nil)
-      @effective_organizations_organization_opts = {
-        users_source_type: users_source_type
-      }
-
+    def effective_organizations_organization
       include ::EffectiveOrganizationsOrganization
     end
   end
@@ -34,9 +30,6 @@ module EffectiveOrganizationsOrganization
 
     accepts_nested_attributes_for :representatives, allow_destroy: true
 
-    has_many :users, through: :representatives,
-      source_type: (@effective_organizations_organization_opts[:users_source_type] || (name.start_with?('Effective') ? '::User' : "#{name.split('::').first}::Organization"))
-
     effective_resource do
       title                 :string
       category              :string
@@ -56,10 +49,6 @@ module EffectiveOrganizationsOrganization
 
   # Instance Methods
 
-  def to_s
-    title.presence || 'New Organization'
-  end
-
   def representative(user:)
     representatives.find { |rep| rep.user_id == user.id }
   end
@@ -67,6 +56,10 @@ module EffectiveOrganizationsOrganization
   # Find or build
   def build_representative(user:)
     representative(user: user) || representatives.build(user: user)
+  end
+
+  def users
+    representatives.reject(&:marked_for_destruction?).map(&:user)
   end
 
 end

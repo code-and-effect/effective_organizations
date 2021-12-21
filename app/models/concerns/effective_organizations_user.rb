@@ -6,11 +6,7 @@ module EffectiveOrganizationsUser
   extend ActiveSupport::Concern
 
   module Base
-    def effective_organizations_user(organizations_source_type: nil)
-      @effective_organizations_user_opts = {
-        organizations_source_type: organizations_source_type
-      }
-
+    def effective_organizations_user
       include ::EffectiveOrganizationsUser
     end
   end
@@ -20,19 +16,25 @@ module EffectiveOrganizationsUser
   end
 
   included do
-    # My teams
     has_many :representatives, -> { Effective::Representative.sorted },
       class_name: 'Effective::Representative', inverse_of: :user, dependent: :delete_all
 
     accepts_nested_attributes_for :representatives, allow_destroy: true
-
-    # App scoped
-    has_many :organizations, through: :representatives,
-      source_type: @effective_organizations_user_opts[:organizations_source_type] || "#{name.split('::').first}::Organization"
   end
+
+  # Instance Methods
 
   def representative(organization:)
     representatives.find { |rep| rep.organization_id == organization.id }
+  end
+
+  # Find or build
+  def build_representative(organization:)
+    representative(organization: organization) || representatives.build(organization: organization)
+  end
+
+  def organizations
+    representatives.reject(&:marked_for_destruction?).map(&:organization)
   end
 
 end
