@@ -6,7 +6,7 @@ module Admin
     include Effective::CrudController
 
     resource_scope -> { EffectiveOrganizations.Organization.deep.all }
-    datatable -> { Admin::EffectiveOrganizationsDatatable.new }
+    datatable -> { EffectiveResources.best('Admin::EffectiveOrganizationsDatatable').new }
 
     private
 
