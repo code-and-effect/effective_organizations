@@ -26,6 +26,11 @@ module Effective
       user.password ||= SecureRandom.base64(12) + '!@#123abcABC-'
     end
 
+    after_commit(on: [:create, :destroy], if: -> { user.class.respond_to?(:effective_memberships_owner?) }) do
+      user.representatives.reload
+      user.update_member_role!
+    end
+
     validates :organization, presence: true
     validates :user, presence: true
 

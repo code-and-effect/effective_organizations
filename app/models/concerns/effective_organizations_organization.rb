@@ -32,6 +32,8 @@ module EffectiveOrganizationsOrganization
 
     effective_resource do
       title                 :string
+      email                 :string
+
       category              :string
 
       notes                 :text

@@ -5,8 +5,10 @@ class EffectiveRepresentativesDatatable < Effective::Datatable
     col :organization
     col :user
 
-    col :email do |representative|
-      mail_to(representative.user.email)
+    unless attributes[:user_id]
+      col :email do |representative|
+        mail_to(representative.user.email)
+      end
     end
 
     col :roles, search: roles_collection

@@ -8,7 +8,6 @@ Bundler.require(*Rails.groups)
 
 require 'devise'
 require 'haml-rails'
-
 require 'effective_organizations'
 
 module Dummy
