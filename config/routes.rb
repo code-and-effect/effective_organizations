@@ -12,7 +12,11 @@ EffectiveOrganizations::Engine.routes.draw do
   end
 
   namespace :admin do
-    resources :organizations, except: [:show]
+    resources :organizations, except: [:show, :destroy] do
+      post :archive, on: :member
+      post :unarchive, on: :member
+    end
+
     resources :representatives, except: [:show]
   end
 

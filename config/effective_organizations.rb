@@ -6,7 +6,7 @@ EffectiveOrganizations.setup do |config|
   # Configure the Layout per controller, or all at once
   # config.layout = { application: 'application', admin: 'admin' }
 
-  # Membership Categories Settings
+  # Organization Settings
   # Configure the class responsible for the organization.
   # config.organization_class_name = 'Effective::Organization'
 end

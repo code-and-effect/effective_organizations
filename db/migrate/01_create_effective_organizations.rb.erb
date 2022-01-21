@@ -9,6 +9,8 @@ class CreateEffectiveOrganizations < ActiveRecord::Migration[6.0]
       t.text      :notes
 
       t.integer   :roles_mask
+      t.boolean   :archived, default: false
+
       t.integer   :representatives_count, default: 0
 
       t.datetime :updated_at

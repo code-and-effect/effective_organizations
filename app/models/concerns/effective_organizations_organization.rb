@@ -38,6 +38,9 @@ module EffectiveOrganizationsOrganization
 
       notes                 :text
 
+      roles_mask            :integer
+      archived              :boolean
+
       representatives_count :integer # Counter cache
 
       timestamps
