@@ -53,6 +53,9 @@ module EffectiveOrganizationsOrganization
   end
 
   # Instance Methods
+  def to_s
+    title.presence || 'organization'
+  end
 
   def representative(user:)
     representatives.find { |rep| rep.user_id == user.id }
