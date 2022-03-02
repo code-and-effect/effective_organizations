@@ -1,7 +1,7 @@
 class CreateEffectiveOrganizations < ActiveRecord::Migration[6.0]
   def change
     # Organizations
-    create_table :organizations do |t|
+    create_table <%= @organizations_table_name %> do |t|
       t.string    :title
 
       t.string    :category
@@ -17,10 +17,10 @@ class CreateEffectiveOrganizations < ActiveRecord::Migration[6.0]
       t.datetime :created_at
     end
 
-    add_index :organizations, :title
+    add_index <%= @organizations_table_name %>, :title
 
     # Representatives
-    create_table :representatives do |t|
+    create_table <%= @representatives_table_name %> do |t|
       t.integer :organization_id
       t.string :organization_type
 
@@ -33,8 +33,8 @@ class CreateEffectiveOrganizations < ActiveRecord::Migration[6.0]
       t.datetime :created_at
     end
 
-    add_index :representatives, [:organization_id, :organization_type]
-    add_index :representatives, [:user_id, :user_type]
+    add_index <%= @representatives_table_name %>, [:organization_id, :organization_type]
+    add_index <%= @representatives_table_name %>, [:user_id, :user_type]
 
   end
 end
